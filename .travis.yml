@@ -1,11 +1,11 @@
 language: cpp
 dist: trusty
-sudo: false
+sudo: required
 compiler:
   - gcc
   - clang
 before_script:
- - apt-get install libboost-dev
+ - sudo apt-get install libboost-dev
 script:
  - autoreconf -i 
  - ./configure
