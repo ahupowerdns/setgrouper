@@ -1,0 +1,15 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+before_script:
+ - sudo apt-get update
+ - sudo apt-get install libboost-test-dev libz-dev 
+script:
+ - autoreconf -i 
+ - ./configure
+ - ./testrun.sh
+notifications:
+  email:
+    - bert.hubert@powerdns.com
+
