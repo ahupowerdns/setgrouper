@@ -1,6 +1,10 @@
 language: cpp
 dist: trusty
-sudo: required
+sudo: false
+addons:
+  apt:
+    packages:
+    - libboost-dev
 compiler:
   - gcc
   - clang
