@@ -11,27 +11,46 @@
 
 using namespace std;
 
+bool g_ignore_case;
 // this allows us to make a Case Insensitive container
 struct CIStringCompare: public std::binary_function<string, string, bool> 
 {
   bool operator()(const string& a, const string& b) const
   {
-    return strcasecmp(a.c_str(), b.c_str()) < 0;
+    if(g_ignore_case)
+      return strcasecmp(a.c_str(), b.c_str()) < 0;
+    else
+      return a<b;
   }
 };
 
 int main(int argc, char**argv)
 {
+  CLI::App app("setgrouper");
+
+  vector<std::string> files;
+  CLI::Option *opt = app.add_option("-f,--file,file", files, "File name");
+  CLI::Option *copt = app.add_flag("-i,--ignore-case", g_ignore_case, "Ignore case");
+  
+  try {
+    app.parse(argc, argv);
+  } catch(const CLI::Error &e) {
+    return app.exit(e);
+  }
+
+
   typedef map<string, boost::dynamic_bitset<>, CIStringCompare> presence_t;
   presence_t presence;
 
   string line;
   cout << '\t';
-  for(int n = 1; n < argc; ++n) {
-    cout << argv[n] << '\t';
-    ifstream ifs(argv[n]);
+
+  int n=0;
+  for(const auto& f : files) {
+    cout << f << '\t';
+    ifstream ifs(f);
     if(!ifs) {
-      cerr<<"Unable to open '"<<argv[n]<<"' for reading\n"<<endl;
+      cerr<<"Unable to open '"<<f<<"' for reading\n"<<endl;
       exit(EXIT_FAILURE);
     }
 
@@ -41,10 +60,11 @@ int main(int argc, char**argv)
         continue;
       presence_t::iterator iter = presence.find(line);
       if(iter == presence.end()) { // not present, do a very efficient 'insert & get location'
-        iter = presence.insert(make_pair(line, boost::dynamic_bitset<>(argc-1))).first; 
+        iter = presence.insert(make_pair(line, boost::dynamic_bitset<>(files.size()))).first; 
       }
-      iter->second[n-1]=1;
+      iter->second[n]=1;
     }
+    ++n;
   }
   cout << '\n';
 
