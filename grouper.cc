@@ -7,6 +7,7 @@
 #include <fstream>
 #include <boost/dynamic_bitset.hpp>
 #include <boost/algorithm/string.hpp>
+#include "ext/CLI11/CLI11.hpp"
 
 using namespace std;
 
