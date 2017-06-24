@@ -9,7 +9,8 @@ bin_PROGRAMS = \
 
 
 grouper_SOURCES =  \
-	grouper.cc
+	grouper.cc \
+	ext/CLI11/CLI11.hpp
 
 grouper_LDFLAGS = \
 	$(AM_LDFLAGS) 
