@@ -9,6 +9,7 @@ before_script:
 script:
  - autoreconf -i 
  - ./configure
+ - make
  - ./testrun.sh
 notifications:
   email:
