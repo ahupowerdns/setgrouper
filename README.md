@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/ahupowerdns/setgrouper.svg?branch=master)](https://travis-ci.org/ahupowerdns/setgrouper)
 # setgrouper
 lists for n files which lines are part of which files from those n. Also
 groups this output so you get list of all lines part of file one but not
@@ -7,11 +8,11 @@ As an example, say you have email addresses which appear on three lists, and
 you want to find out who is on the first and second lists, but not the
 third, this is your tool.
 
-Easily scales to millions of lines.
+Easily scales to millions of lines, although there are some trivial
+optimization possibilities left.
 
 This tool has previously been described in the blogpost [I'm a C++ dinosaur
-but I'm
-ok](http://bert-hubert.blogspot.nl/2012/10/im-c-dinosaur-but-im-ok.html).
+but I'm ok](http://bert-hubert.blogspot.nl/2012/10/im-c-dinosaur-but-im-ok.html).
 Since C++ 2011 and 2014, I no longer feel like a dinosaur using C++ though!
 
 # Example
@@ -70,3 +71,8 @@ zus
 Group (size=1): 	1	1	1	
 wim	
 ```
+
+# Related work
+[`combine`](https://manpages.debian.org/testing/moreutils/combine.1.en.html) does something similar, but only for two files.
+[`comm`](https://manpages.debian.org/testing/coreutils/comm.1.en.html) also
+has related capabilities, but again only for two (sorted) files.
