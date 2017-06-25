@@ -4,9 +4,8 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include <strings.h>
 #include <fstream>
-#include <boost/dynamic_bitset.hpp>
-#include <boost/algorithm/string.hpp>
 #include "ext/CLI11/CLI11.hpp"
 
 using namespace std;
@@ -24,6 +23,15 @@ struct CIStringCompare: public std::binary_function<string, string, bool>
   }
 };
 
+static void trim(std::string& in)
+{
+  if(in.empty())
+    return;
+  auto pos=in.find_last_not_of(" \t\r\n");
+  if(pos != string::npos)
+    in.resize(pos+1);
+}
+
 int main(int argc, char**argv)
 {
   CLI::App app("setgrouper");
@@ -39,7 +47,7 @@ int main(int argc, char**argv)
   }
 
 
-  typedef map<string, boost::dynamic_bitset<>, CIStringCompare> presence_t;
+  typedef map<string, vector<bool>, CIStringCompare> presence_t;
   presence_t presence;
 
   string line;
@@ -55,12 +63,12 @@ int main(int argc, char**argv)
     }
 
     while(getline(ifs, line)) {
-      boost::trim(line);
+      trim(line);
       if(line.empty())
         continue;
       presence_t::iterator iter = presence.find(line);
       if(iter == presence.end()) { // not present, do a very efficient 'insert & get location'
-        iter = presence.insert(make_pair(line, boost::dynamic_bitset<>(files.size()))).first; 
+        iter = presence.insert(make_pair(line, vector<bool>(files.size()))).first; 
       }
       iter->second[n]=1;
     }
@@ -69,13 +77,13 @@ int main(int argc, char**argv)
   cout << '\n';
 
   // this is where we store the reverse map, 'presence groups', so which lines where present in file1, but not file2 etc
-  typedef map<boost::dynamic_bitset<>, vector<string> > revpresence_t;
+  typedef map<vector<bool>, vector<string> > revpresence_t;
   revpresence_t revpresence;
 
   for(const auto& val : presence) {
     revpresence[val.second].push_back(val.first);
     cout << val.first << '\t';
-    for (boost::dynamic_bitset<>::size_type i = 0; i < val.second.size(); ++i) {
+    for (vector<bool>::size_type i = 0; i < val.second.size(); ++i) {
       cout << val.second[i] << '\t';
     }
     cout << endl;
@@ -85,7 +93,7 @@ int main(int argc, char**argv)
   for(const auto& val: revpresence) {
     cout<<"\nGroup (size="<<val.second.size()<<"): \t";
 
-    for (boost::dynamic_bitset<>::size_type i = 0; i < val.first.size(); ++i) {
+    for (vector<bool>::size_type i = 0; i < val.first.size(); ++i) {
       cout << val.first[i] << '\t';
     }
 

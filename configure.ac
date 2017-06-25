@@ -26,12 +26,10 @@ AC_DEFINE([_GNU_SOURCE], [1],
   [Define _GNU_SOURCE so that we get all necessary prototypes]
 )
 
-BOOST_REQUIRE([1.35])
-
 AC_SUBST(LIBS)
 
 AC_SUBST([AM_CPPFLAGS],
-  ["AS_ESCAPE([-I$(top_builddir) -I$(top_srcdir)]) $THREADFLAGS $BOOST_CPPFLAGS"]
+  ["AS_ESCAPE([-I$(top_builddir) -I$(top_srcdir)]) $THREADFLAGS"]
 )
 
 AC_SUBST([PROGRAM_LDFLAGS])
