@@ -29,8 +29,8 @@ int main(int argc, char**argv)
   CLI::App app("setgrouper");
 
   vector<std::string> files;
-  CLI::Option *opt = app.add_option("-f,--file,file", files, "File name");
-  CLI::Option *copt = app.add_flag("-i,--ignore-case", g_ignore_case, "Ignore case");
+  app.add_option("-f,--file,file", files, "File name");
+  app.add_flag("-i,--ignore-case", g_ignore_case, "Ignore case");
   
   try {
     app.parse(argc, argv);
@@ -72,7 +72,7 @@ int main(int argc, char**argv)
   typedef map<boost::dynamic_bitset<>, vector<string> > revpresence_t;
   revpresence_t revpresence;
 
-  for(auto& val : presence) {
+  for(const auto& val : presence) {
     revpresence[val.second].push_back(val.first);
     cout << val.first << '\t';
     for (boost::dynamic_bitset<>::size_type i = 0; i < val.second.size(); ++i) {
@@ -82,7 +82,7 @@ int main(int argc, char**argv)
   }
 
   cout << "\nPer group output\t\n";
-  for(auto& val: revpresence) {
+  for(const auto& val: revpresence) {
     cout<<"\nGroup (size="<<val.second.size()<<"): \t";
 
     for (boost::dynamic_bitset<>::size_type i = 0; i < val.first.size(); ++i) {
@@ -91,7 +91,7 @@ int main(int argc, char**argv)
 
     cout << endl;
 
-    for(string& entry : val.second) {
+    for(const string& entry : val.second) {
       cout << entry << "\t\n";
     }
   }
